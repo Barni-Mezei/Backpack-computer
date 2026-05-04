@@ -1,0 +1,5 @@
+newmtl m_main
+map_Ka backpack_computer_asg.png
+map_Kd backpack_computer_diff.png
+map_Ks backpack_computer_asg.png
+newmtl none

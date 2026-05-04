@@ -3,17 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="favicon.png">
     <title>Backpack computer</title>
     <style>
         @font-face {
-        font-family: minecraft;
-        src: url(res/fonts/Minecraft.ttf);
+            font-family: minecraft;
+            src: url(res/fonts/Minecraft.ttf);
+        }
+
+        :root {
+            /* Screen colors */
+            --drawing: #5dd85a;
+            --bg-light: #1f2f19;
+            --bg-dark: #0f160c;
         }
 
         body {
             margin: 0;
             overflow: hidden;
-            background-color: black;
+            background-color: var(--bg-dark);
         }
 
         #maincv {
@@ -21,39 +29,37 @@
             display: none;
 
             width: 200px;
-            height: 200px;
 
             image-rendering: pixelated;
 
             outline: 1px solid red;
 
-            background-color: black;
+            background-color: var(--bg-light);
         }
 
         #title {
             position: fixed;
 
-            text-align: center;
+            text-align: left;
 
-            margin: 20px;
+            margin: 5px;
             padding: 0px;
 
             width: 100%;
 
-            color: #00ff00;
+            color: var(--drawing);
             background-color: transparent;
 
-            font-family: minecraft;
+            font-family: monospace;
             font-size: 32px;
+            font-weight: 400;
 
-            text-shadow: 4.5px 4.5px #008800;
-
-            image-rendering: pixelated;
+            filter: blur(0.75px);
         }
     </style>
 </head>
 <body>
-    <h1 id="title">Backpack computer :></h1>
+    <h1 id="title">Backpack computer</h1>
     <canvas id="maincv"></canvas>
 
     <!-- Load THREE.js -->
