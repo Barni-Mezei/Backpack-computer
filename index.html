@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backpack computer</title>
+    <style>
+        @font-face {
+        font-family: minecraft;
+        src: url(res/fonts/Minecraft.ttf);
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #maincv {
+            position: fixed;
+            display: none;
+
+            width: 200px;
+            height: 200px;
+
+            image-rendering: pixelated;
+
+            outline: 1px solid red;
+
+            background-color: black;
+        }
+
+        #title {
+            position: fixed;
+
+            text-align: center;
+
+            margin: 20px;
+            padding: 0px;
+
+            width: 100%;
+
+            color: #00ff00;
+            background-color: transparent;
+
+            font-family: minecraft;
+            font-size: 32px;
+
+            text-shadow: 4.5px 4.5px #008800;
+
+            image-rendering: pixelated;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="title">Backpack computer :></h1>
+    <canvas id="maincv"></canvas>
+
+    <!-- Load THREE.js -->
+    <script defer type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script defer type="module" src="main.js"></script>
+</body>
+</html>
