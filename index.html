@@ -13,7 +13,7 @@
 
         :root {
             /* Screen colors */
-            --drawing: #5dd85a;
+            --drawing: #50815d;/*#5dd85a;*/
             --bg-light: #1f2f19;
             --bg-dark: #0f160c;
         }
@@ -55,11 +55,20 @@
             font-weight: 400;
 
             filter: blur(0.75px);
+
+            pointer-events: none;
+        }
+
+        #title.center {
+            top: 50%;
+
+            transform: translateY(-50%);
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <h1 id="title">Backpack computer</h1>
+    <h1 id="title" class="center">Loading...</h1>
     <canvas id="maincv"></canvas>
 
     <!-- Load THREE.js -->
@@ -72,6 +81,8 @@
     }
     </script>
 
+    <script defer src="objects.js"></script>
+    <script defer src="bpcomp.js"></script>
     <script defer type="module" src="main.js"></script>
 </body>
 </html>

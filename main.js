@@ -8,7 +8,6 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 let camera, renderer, controls, model;
 
 let scene = new THREE.Scene();
-let light;
 
 // Create screen canvas
 let c = document.getElementById("maincv");
@@ -38,11 +37,23 @@ async function init() {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 20);
     camera.position.z = 5;
 
-    const ambientLight = new THREE.AmbientLight(0xffeedd, 0.75);
-    scene.add(ambientLight);
+    let pLight = new THREE.PointLight(0xffeedd, 5);
+    let dLight1 = new THREE.DirectionalLight(0xffdddd, 1);
+    let dLight2 = new THREE.DirectionalLight(0xddeeff, 1);
+    let dLight3 = new THREE.DirectionalLight(0xdddddd, 1);
+    dLight1.position.set(1, 1, 1);
+    dLight2.position.set(-2, 0, 0.25);
+    dLight3.position.set(0.25, -0.25, -1);
 
-    light = new THREE.PointLight(0xffeedd, 15);
-    camera.add(light);
+    // dLight1.add(new THREE.Box3Helper(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3(0.01, 0.01, 0.01)), 0xffff00));
+    // dLight2.add(new THREE.Box3Helper(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3(0.01, 0.01, 0.01)), 0xffff00));
+    // dLight3.add(new THREE.Box3Helper(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3(0.01, 0.01, 0.01)), 0xffff00));
+
+    //camera.add(pLight);
+    
+    scene.add(dLight1);
+    scene.add(dLight2);
+    scene.add(dLight3);
     scene.add(camera);
 
     scene.background = new THREE.Color().setHex(0x0f160c);
@@ -60,26 +71,26 @@ async function init() {
     // Load model textures
     let tLoader = new THREE.TextureLoader();
     let textureNormal = tLoader.load("res/models/sm/backpack_computer_nor.png");
-    textureNormal.colorSpace = THREE.SRGBColorSpace;
     let textureAsg = tLoader.load("res/models/sm/backpack_computer_asg.png");
-    textureAsg.colorSpace = THREE.SRGBColorSpace;
     let textureMask = tLoader.load("res/models/sm/backpack_computer_mask.png");
+    textureNormal.colorSpace = THREE.SRGBColorSpace;
+    textureAsg.colorSpace = THREE.SRGBColorSpace;
     textureMask.colorSpace = THREE.SRGBColorSpace;
 
     let material = new THREE.MeshStandardMaterial({
-        color: 0xaaaaaa, // Darken the model
+        //color: 0xaaaaaa, // Darken the model
         map: ct,
         normalMap: textureNormal,
         aoMap: textureAsg,
 
-        roughness: 1.0,
-        metalness: 0.0
+        roughness: 0.8,
+        metalness: 0.1
     });
 
     materials.materials.m_main = material;
 
     // Load the model
-    const mLoader = new OBJLoader().setPath('res/models/sm/');
+    let mLoader = new OBJLoader().setPath('res/models/sm/');
     mLoader.setMaterials(materials);
 
     model = await mLoader.loadAsync('backpack_computer.obj');
@@ -90,20 +101,26 @@ async function init() {
     scene.add(model);
 
     renderer = new THREE.WebGLRenderer({ antialias: true });
+
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setAnimationLoop(animate);
+    renderer.setAnimationLoop(mainLoop);
     document.body.appendChild(renderer.domElement);
 
     controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.minDistance = 3;
-    controls.maxDistance = 8;
+    controls.minDistance = 2.5;
+    controls.maxDistance = 10;
 
-    /*const axesHelper = new THREE.AxesHelper(5);
-    scene.add(axesHelper);*/
+    // let axisHelper = new THREE.AxesHelper(5);
+    // scene.add(axisHelper);
 
     window.addEventListener('resize', onWindowResize);
+
+    // Remove "loading" text
+    let title = document.getElementById("title");
+    title.classList.remove("center");
+    title.textContent = "$ Backpack computer...";
 }
 
 function onWindowResize() {
@@ -112,7 +129,6 @@ function onWindowResize() {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
-
 
 function randInt(min, max) {
     return min + Math.round(Math.random() * (max - min));
@@ -123,44 +139,23 @@ function clamp(value, min, max) {
 }
 
 let loopCounter = 0;
-let text = "";
+let lastTime = 0;
 
-let data = {
-    index: 0,
-}
-
-function animate() {
+function mainLoop(time) {
     controls.update();
 
-    /*let r = Math.sin(loopCounter * 0.001) * 0.2;
-
-    camera.position.x = Math.sin(r) * 5;
-    camera.position.z = Math.cos(r) * 5;
-    camera.position.y = Math.sin(loopCounter * 0.01) * 0.1;*/
-
-    // Update text
-    if (loopCounter % 16 == 0) {
-        data.index = (data.index + 1) %  4;
-        let chars = "|/-\\";
-
-        // Generate interface (16x8 characters)
-        text = `\
- --- B.P.C ---
-$ help
-Version: 1.0
-8-bit edition
-
-
-Loading...
-${chars[data.index]}
-`
+    // Update UI at a fix framerate
+    if (time - lastTime > 125) {
+        loopCounter++;
+        lastTime = time;
+        
         ctx.clearRect(0, 0, c.width, c.height);
         ctx.drawImage(image, 0, 0);
-        //ctx.drawImage(mask, 0, 0);
-
+        
         ctx.font = `16px monospace`;
         ctx.fillStyle = "#5dd85a";
         
+        let text = screenManager.update();
         let lines = text.split("\n");
         
         for (let i in lines) {
@@ -169,8 +164,6 @@ ${chars[data.index]}
 
         ct.needsUpdate = true;
     }
-
-    loopCounter++;
 
     renderer.render(scene, camera);
 }
