@@ -9,13 +9,6 @@ let camera, renderer, controls, model;
 
 let scene = new THREE.Scene();
 
-// Create screen canvas
-let c = document.getElementById("maincv");
-let ctx = c.getContext("2d");
-
-c.width = 1024;
-c.height = 1024;
-
 // Create the texture from the canvas
 let ct = new THREE.CanvasTexture(c);
 ct.minFilter = THREE.NearestFilter;
@@ -27,11 +20,7 @@ ct.repeat.set(1.0, 1.0);
 
 let image, mask;
 
-/********/
-/* MAIN */
-/********/
 
-init();
 
 async function init() {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 20);
@@ -118,9 +107,7 @@ async function init() {
     window.addEventListener('resize', onWindowResize);
 
     // Remove "loading" text
-    let title = document.getElementById("title");
-    title.classList.remove("center");
-    title.textContent = "$ Backpack computer...";
+    document.getElementById("loading").classList.add("hidden");
 }
 
 function onWindowResize() {
@@ -130,13 +117,11 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function randInt(min, max) {
-    return min + Math.round(Math.random() * (max - min));
-}
+/********/
+/* MAIN */
+/********/
 
-function clamp(value, min, max) {
-    return Math.min(Math.max(value, min), max);
-}
+init();
 
 let loopCounter = 0;
 let lastTime = 0;
@@ -144,17 +129,23 @@ let lastTime = 0;
 function mainLoop(time) {
     controls.update();
 
+    // Toggle debug screen
+    if (_testKeyId("F2", keys.justPressed)) {
+        document.getElementById("canvasAlign").classList.toggle("hidden");
+    }
+
     // Update UI at a fix framerate
     if (time - lastTime > 125) {
         loopCounter++;
         lastTime = time;
-        
+
         ctx.clearRect(0, 0, c.width, c.height);
         ctx.drawImage(image, 0, 0);
         
         ctx.font = `16px monospace`;
         ctx.fillStyle = "#5dd85a";
         
+        // Call screen update
         let text = screenManager.update();
         let lines = text.split("\n");
         
@@ -163,7 +154,10 @@ function mainLoop(time) {
         }
 
         ct.needsUpdate = true;
+        clearBuffer();
     }
+
+    updateInputs();
 
     renderer.render(scene, camera);
 }

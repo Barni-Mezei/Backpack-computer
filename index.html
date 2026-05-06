@@ -4,72 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
     <title>Backpack computer</title>
     <style>
-        @font-face {
-            font-family: minecraft;
-            src: url(res/fonts/Minecraft.ttf);
-        }
 
-        :root {
-            /* Screen colors */
-            --drawing: #50815d;/*#5dd85a;*/
-            --bg-light: #1f2f19;
-            --bg-dark: #0f160c;
-        }
-
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: var(--bg-dark);
-        }
-
-        #maincv {
-            position: fixed;
-            display: none;
-
-            width: 200px;
-
-            image-rendering: pixelated;
-
-            outline: 1px solid red;
-
-            background-color: var(--bg-light);
-        }
-
-        #title {
-            position: fixed;
-
-            text-align: left;
-
-            margin: 5px;
-            padding: 0px;
-
-            width: 100%;
-
-            color: var(--drawing);
-            background-color: transparent;
-
-            font-family: monospace;
-            font-size: 32px;
-            font-weight: 400;
-
-            filter: blur(0.75px);
-
-            pointer-events: none;
-        }
-
-        #title.center {
-            top: 50%;
-
-            transform: translateY(-50%);
-            text-align: center;
-        }
     </style>
 </head>
 <body>
-    <h1 id="title" class="center">Loading...</h1>
-    <canvas id="maincv"></canvas>
+    <h1 id="loading">Loading...</h1>
+
+    <div id="canvasAlign" class="hidden">
+        <div id="canvasContainer">
+            <canvas id="maincv"></canvas>
+        </div>
+    </div>
 
     <!-- Load THREE.js -->
     <script defer type="importmap">
@@ -81,6 +29,8 @@
     }
     </script>
 
+    <script defer src="init.js"></script>
+    <script defer src="inputs.js"></script>
     <script defer src="objects.js"></script>
     <script defer src="bpcomp.js"></script>
     <script defer type="module" src="main.js"></script>

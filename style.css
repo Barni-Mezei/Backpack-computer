@@ -1,0 +1,100 @@
+:root {
+    --text-color: #50815d;
+    --bg-color: #0f160c;
+}
+
+*.hidden {
+    display: none !important;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-color);
+    overflow: hidden;
+}
+
+#loading {
+    position: fixed;
+
+    margin: 0px;
+    padding: 0px;
+
+    width: 100%;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+    text-align: center;
+
+    color: var(--text-color);
+    background-color: transparent;
+
+    font-family: monospace;
+    font-size: 32px;
+    font-weight: 400;
+
+    filter: blur(0.75px);
+
+    pointer-events: none;
+}
+
+#maincv {
+    aspect-ratio: 1;
+
+    width: 100%;
+
+    image-rendering: optimizeQuality;
+
+    /* Cutout region of the texture for the moitor */
+    --ratio: calc(100 / 1024);
+    --x: 662;
+    --y: 313;
+    --w: 213;
+    --h: 212;
+
+    --scaleX: calc(1024 / var(--w));
+    --scaleY: calc(1024 / var(--h));
+    --posX: calc(var(--x) * -1% * var(--ratio) * var(--scaleX));
+    --posY: calc(var(--y) * -1% * var(--ratio) * var(--scaleY));
+
+    transform-origin: top left;
+    transform: translate(var(--posX), var(--posY)) scale(var(--scaleX), var(--scaleY));
+}
+
+#canvasContainer {
+    aspect-ratio: 1;
+
+
+    width: min(90vw, 90vh);
+
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: var(--bg-light);
+
+    /*border-radius: 15%;*/
+    
+    overflow: hidden;
+}
+
+#canvasAlign {
+    position: fixed;
+    display: flex;
+
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0px;
+    padding: 0px;
+
+    width: 100vw;
+    height: 100vh;
+
+    top: 0px;
+    left: 0px;
+
+    pointer-events: none;
+
+    background-color: #000;
+}

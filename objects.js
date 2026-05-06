@@ -4,7 +4,6 @@ class BPCScreenManager {
     currentScreen = "";
     clock = 0;
 
-
     constructor() {
         this.screens = {};
         this.clock = 0;
